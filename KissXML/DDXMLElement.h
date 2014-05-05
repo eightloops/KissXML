@@ -38,7 +38,7 @@
 - (void)addAttribute:(DDXMLNode *)attribute;
 - (void)removeAttributeForName:(NSString *)name;
 - (void)setAttributes:(NSArray *)attributes;
-//- (void)setAttributesAsDictionary:(NSDictionary *)attributes;
+- (void)setAttributesAsDictionary:(NSDictionary *)attributes;
 - (NSArray *)attributes;
 - (DDXMLNode *)attributeForName:(NSString *)name;
 //- (DDXMLNode *)attributeForLocalName:(NSString *)localName URI:(NSString *)URI;
@@ -60,7 +60,7 @@
 - (void)removeChildAtIndex:(NSUInteger)index;
 - (void)setChildren:(NSArray *)children;
 - (void)addChild:(DDXMLNode *)child;
-//- (void)replaceChildAtIndex:(NSUInteger)index withNode:(DDXMLNode *)node;
+- (void)replaceChildAtIndex:(NSUInteger)index withNode:(DDXMLNode *)node;
 //- (void)normalizeAdjacentTextNodesPreservingCDATA:(BOOL)preserve;
 
 @end

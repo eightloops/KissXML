@@ -1,6 +1,10 @@
 #import "DDXMLPrivate.h"
 #import "NSString+DDXML.h"
 
+#import <libxml/parser.h>
+#import <libxml/HTMLparser.h>
+
+
 #if ! __has_feature(objc_arc)
 #warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
 #endif
@@ -100,6 +104,22 @@
 	}
 	
 	return [self initWithDocPrimitive:doc owner:nil];
+}
+
+- (id)initWithHTMLString: (NSString *) htmlString {
+  NSData *data = [htmlString dataUsingEncoding: NSUTF8StringEncoding];
+  if( data == nil || [data length] == 0) {
+    return nil;
+  }
+  xmlKeepBlanksDefault(0);
+  
+  int options = HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING;
+  htmlDocPtr doc = htmlReadMemory( data.bytes, data.length, NULL, NSUTF8StringEncoding, options);
+  if( doc == NULL) {
+    return nil;
+  } else {
+    return [self initWithDocPrimitive: (xmlDocPtr)doc owner: nil];
+  }
 }
 
 /**

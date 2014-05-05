@@ -416,6 +416,15 @@
 	}
 }
 
+- (void)setAttributesAsDictionary:(NSDictionary *)attributes {
+  NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity: attributes.count];
+  for( NSString *key in attributes) {
+    DDXMLNode *node = [DDXMLNode attributeWithName: key stringValue: [attributes valueForKey: key]];
+    [array addObject: node];
+  }
+  [self setAttributes: array];
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Namespaces
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -778,6 +787,11 @@
 		}
 		child = child->next;
 	}
+}
+
+- (void)replaceChildAtIndex:(NSUInteger)index withNode:(DDXMLNode *)node {
+  [self removeChildAtIndex: index];
+  [self insertChild: node atIndex: index];
 }
 
 - (void)setChildren:(NSArray *)children
