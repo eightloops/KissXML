@@ -42,6 +42,7 @@
 + (void)testNSXMLBugs;
 + (void)testInsertChild;
 + (void)testElementSerialization;
++ (void)testHTMLParsingAndSerialization;
 + (void)testAttrWithColonInName;
 + (void)testMemoryIssueDebugging;
 + (void)testAttrNs;
@@ -89,6 +90,7 @@ static DDAssertionHandler *ddAssertionHandler;
 	[self testNSXMLBugs];
 	[self testInsertChild];
 	[self testElementSerialization];
+  [self testHTMLParsingAndSerialization];
 	[self testAttrWithColonInName];
 	[self testMemoryIssueDebugging];
 	[self testAttrNs];
@@ -1720,6 +1722,19 @@ static DDAssertionHandler *ddAssertionHandler;
 	NSAssert((dde != nil) && (err == nil), @"Failed test 1");
 	
 	NSAssert([[nse XMLString] isEqualToString:[dde XMLString]], @"Failed test 2");	
+}}
+
++ (void)testHTMLParsingAndSerialization { @autoreleasepool {
+	NSLog(@"Starting %@...", NSStringFromSelector(_cmd));
+  
+  NSString *html = @"<p>Broken HTML";
+  
+  NSString *expected =
+    @"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n"
+    @"<html><body><p>Broken HTML</p></body></html>";
+  
+  DDXMLDocument *doc = [[DDXMLDocument alloc] initWithHTMLString: html];
+  NSAssert( [[doc XMLString] isEqualToString: expected], @"Failed test 1");
 }}
 
 + (void)testAttrWithColonInName { @autoreleasepool

@@ -114,7 +114,7 @@
   xmlKeepBlanksDefault(0);
   
   int options = HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING;
-  htmlDocPtr doc = htmlReadMemory( data.bytes, data.length, NULL, NSUTF8StringEncoding, options);
+  htmlDocPtr doc = htmlReadMemory( data.bytes, data.length, NULL, 0, options);
   if( doc == NULL) {
     return nil;
   } else {

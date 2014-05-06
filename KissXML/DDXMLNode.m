@@ -3,6 +3,7 @@
 
 #import <libxml/xpath.h>
 #import <libxml/xpathInternals.h>
+#import <libxml/HTMLtree.h>
 
 #if ! __has_feature(objc_arc)
 #warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
@@ -1161,10 +1162,21 @@ static void MarkDeath(void *xmlPtr, DDXMLNode *wrapper);
 	int dumpCnt;
 	
 	xmlBufferPtr bufferPtr = xmlBufferCreate();
-	if (IsXmlNsPtr(genericPtr))
-		dumpCnt = xmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr, 0, format);
-	else
-		dumpCnt = xmlNodeDump(bufferPtr, ((xmlStdPtr)genericPtr)->doc, (xmlNodePtr)genericPtr, 0, format);
+	if (IsXmlNsPtr(genericPtr)) {
+    xmlDocPtr doc = ((xmlNsPtr)genericPtr)->context;
+    if( doc && doc->type == XML_HTML_DOCUMENT_NODE) {
+      dumpCnt = htmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr);
+    } else {
+      dumpCnt = xmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr, 0, format);
+    }
+  } else {
+    xmlDocPtr doc = ((xmlStdPtr)genericPtr)->doc;
+    if( doc && doc->type == XML_HTML_DOCUMENT_NODE) {
+      dumpCnt = htmlNodeDump(bufferPtr, doc, (xmlNodePtr)genericPtr);
+    } else {
+      dumpCnt = xmlNodeDump(bufferPtr, doc, (xmlNodePtr)genericPtr, 0, format);
+    }
+  }
 	
 	if (dumpCnt < 0)
 	{
