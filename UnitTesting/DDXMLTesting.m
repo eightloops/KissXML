@@ -1734,7 +1734,7 @@ static DDAssertionHandler *ddAssertionHandler;
     @"<html><body><p>Broken HTML</p></body></html>";
   
   DDXMLDocument *doc = [[DDXMLDocument alloc] initWithHTMLString: html];
-  NSAssert( [[doc XMLString] isEqualToString: expected], @"Failed test 1");
+  NSAssert( [[doc HTMLString] isEqualToString: expected], @"Failed test 1");
 }}
 
 + (void)testAttrWithColonInName { @autoreleasepool

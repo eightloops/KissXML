@@ -1163,19 +1163,10 @@ static void MarkDeath(void *xmlPtr, DDXMLNode *wrapper);
 	
 	xmlBufferPtr bufferPtr = xmlBufferCreate();
 	if (IsXmlNsPtr(genericPtr)) {
-    xmlDocPtr doc = ((xmlNsPtr)genericPtr)->context;
-    if( doc && doc->type == XML_HTML_DOCUMENT_NODE) {
-      dumpCnt = htmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr);
-    } else {
-      dumpCnt = xmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr, 0, format);
-    }
+    dumpCnt = xmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr, 0, format);
   } else {
     xmlDocPtr doc = ((xmlStdPtr)genericPtr)->doc;
-    if( doc && doc->type == XML_HTML_DOCUMENT_NODE) {
-      dumpCnt = htmlNodeDump(bufferPtr, doc, (xmlNodePtr)genericPtr);
-    } else {
-      dumpCnt = xmlNodeDump(bufferPtr, doc, (xmlNodePtr)genericPtr, 0, format);
-    }
+    dumpCnt = htmlNodeDump(bufferPtr, doc, (xmlNodePtr)genericPtr);
   }
 	
 	if (dumpCnt < 0)
@@ -1198,6 +1189,38 @@ static void MarkDeath(void *xmlPtr, DDXMLNode *wrapper);
 		
 		xmlBufferFree(bufferPtr);
 		
+		return [resTmp copy];
+	}
+}
+
+- (NSString *)HTMLString
+{
+#if DDXML_DEBUG_MEMORY_ISSUES
+	DDXMLNotZombieAssert();
+#endif
+	
+	int dumpCnt;
+	
+	xmlBufferPtr bufferPtr = xmlBufferCreate();
+	if (IsXmlNsPtr(genericPtr)) {
+    dumpCnt = htmlNodeDump(bufferPtr, NULL, (xmlNodePtr)genericPtr);
+  } else {
+    xmlDocPtr doc = ((xmlStdPtr)genericPtr)->doc;
+    dumpCnt = htmlNodeDump(bufferPtr, doc, (xmlNodePtr)genericPtr);
+  }
+	
+	if (dumpCnt < 0) {
+		return nil;
+	}
+	
+	if ([self kind] == DDXMLTextKind)	{
+		NSString *result = [NSString stringWithUTF8String:(const char *)bufferPtr->content];
+		xmlBufferFree(bufferPtr);
+		return result;
+	}	else {
+		NSMutableString *resTmp = [NSMutableString stringWithUTF8String:(const char *)bufferPtr->content];
+		CFStringTrimWhitespace((__bridge CFMutableStringRef)resTmp);
+		xmlBufferFree(bufferPtr);
 		return [resTmp copy];
 	}
 }

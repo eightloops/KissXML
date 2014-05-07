@@ -146,6 +146,7 @@ enum {
 - (NSString *)description;
 - (NSString *)XMLString;
 - (NSString *)XMLStringWithOptions:(NSUInteger)options;
+- (NSString *)HTMLString;
 //- (NSString *)canonicalXMLStringPreservingComments:(BOOL)comments;
 
 #pragma mark --- XPath/XQuery ---
