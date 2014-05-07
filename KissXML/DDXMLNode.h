@@ -58,8 +58,9 @@ enum {
 	// We cannot free the tree heirarchy until all referencing nodes have been released.
 	// So all nodes retain a reference to the node that created them,
 	// and when the last reference is released the tree gets freed.
-	DDXMLNode *owner;
 }
+
+@property (nonatomic, unsafe_unretained) DDXMLNode *owner;
 
 //- (id)initWithKind:(DDXMLNodeKind)kind;
 

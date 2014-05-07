@@ -323,7 +323,7 @@
 	xmlAddChild((xmlNodePtr)genericPtr, (xmlNodePtr)attribute->genericPtr);
 	
 	// The attribute is now part of the xml tree heirarchy
-	attribute->owner = self;
+	attribute.owner = self;
 }
 
 - (void)removeAttributeForName:(NSString *)name
@@ -481,7 +481,7 @@
 	}
 	
 	// The namespace is now part of the xml tree heirarchy
-	namespace->owner = self;
+	namespace.owner = self;
 	
 	if ([namespace isKindOfClass:[DDXMLNamespaceNode class]])
 	{
@@ -714,7 +714,7 @@
 	xmlAddChild((xmlNodePtr)genericPtr, (xmlNodePtr)child->genericPtr);
 	
 	// The node is now part of the xml tree heirarchy
-	child->owner = self;
+	child.owner = self;
 }
 
 - (void)insertChild:(DDXMLNode *)child atIndex:(NSUInteger)index
@@ -740,7 +740,7 @@
 			{
 				xmlAddPrevSibling(childNodePtr, (xmlNodePtr)child->genericPtr);
 				
-				child->owner = self;
+				child.owner = self;
 				
 				return;
 			}
@@ -754,7 +754,7 @@
 	{
 		xmlAddChild((xmlNodePtr)genericPtr, (xmlNodePtr)child->genericPtr);
 		
-		child->owner = self;
+		child.owner = self;
 		
 		return;
 	}

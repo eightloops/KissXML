@@ -211,7 +211,7 @@ static void MarkDeath(void *xmlPtr, DDXMLNode *wrapper);
 	if ((self = [super init]))
 	{
 		genericPtr = kindPtr;
-		owner = inOwner;
+		_owner = inOwner;
 		
 	#if DDXML_DEBUG_MEMORY_ISSUES
 		MarkBirth(genericPtr, self);
@@ -247,7 +247,7 @@ static void MarkDeath(void *xmlPtr, DDXMLNode *wrapper);
 	// We also check if genericPtr is NULL.
 	// This may be the case if, e.g., DDXMLElement calls [self release] from it's init method.
 	
-	if ((owner == nil) && (genericPtr != NULL))
+	if ((_owner == nil) && (genericPtr != NULL))
 	{
 		if (IsXmlNsPtr(genericPtr))
 		{
@@ -864,7 +864,7 @@ static void MarkDeath(void *xmlPtr, DDXMLNode *wrapper);
 		{
 			[[self class] detachChild:(xmlNodePtr)node];
 			
-			owner = nil;
+			_owner = nil;
 		}
 	}
 }
@@ -2429,7 +2429,7 @@ BOOL DDXMLIsZombie(void *xmlPtr, DDXMLNode *wrapper)
 	{
 		[DDXMLNode detachNamespace:(xmlNsPtr)genericPtr fromNode:nsParentPtr];
 		
-		owner = nil;
+		self.owner = nil;
 		nsParentPtr = NULL;
 	}
 }
@@ -2678,7 +2678,7 @@ BOOL DDXMLIsZombie(void *xmlPtr, DDXMLNode *wrapper)
 			attr->ns = attrNsPtr;
 		}
 		
-		owner = nil;
+		self.owner = nil;
 	}
 }
 
